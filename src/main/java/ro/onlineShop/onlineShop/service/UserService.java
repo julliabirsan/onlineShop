@@ -14,10 +14,14 @@ public class UserService {
     UserDao userDao;
 
     public void save(String email, String password){
-        userDao.save(email,password);
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
+        userDao.save(user);
     }
 
     public List<User> getUsersByEmail(String email){
-       return userDao.findByEmail(email);
+
+        return userDao.findByEmail(email);
     }
 }

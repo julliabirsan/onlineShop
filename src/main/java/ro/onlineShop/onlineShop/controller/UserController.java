@@ -3,12 +3,16 @@ package ro.onlineShop.onlineShop.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import ro.onlineShop.onlineShop.dao.Product;
 import ro.onlineShop.onlineShop.dao.User;
 import ro.onlineShop.onlineShop.security.UserSession;
+import ro.onlineShop.onlineShop.service.ProductService;
 import ro.onlineShop.onlineShop.service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -19,6 +23,12 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    ProductService productService;
+
+    static int itemsCart;
+    List<Product> productList;
 
     @GetMapping("/register-form")
     public ModelAndView registerAction(@RequestParam("email") String email,
@@ -78,12 +88,27 @@ public class UserController {
 
     @GetMapping("dashboard")
     public ModelAndView dashboard(){
+        ModelAndView modelAndView = new ModelAndView("dashboard");
 
         int id = userSession.getId();
         if (id == 0){
             return new ModelAndView("redirect:/index.html");
         }
+
+        productList = productService.getAllProducts();
+        modelAndView.addObject("productList", productList);
+        modelAndView.addObject("items", itemsCart);
         //cum verific daca user-ul este logat sau nu?
-        return new ModelAndView("dashboard");
+        return modelAndView;
+    }
+
+    @PostMapping("/addToCart")
+    public ModelAndView addToCart(@RequestParam("productId") Integer id){
+        ModelAndView modelAndView = new ModelAndView("dashboard");
+        System.out.println(id);
+        itemsCart++;
+        modelAndView.addObject("productList", productList);
+        modelAndView.addObject("items", itemsCart);
+        return modelAndView;
     }
 }

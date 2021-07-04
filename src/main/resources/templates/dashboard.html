@@ -7,5 +7,36 @@
 <body>
 Bine ai venit!
 Doar daca este autentificat poti accesa aceasta pagina!
+
+<table>
+    <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>price</th>
+        <th>quantity</th>
+        <th>category</th>
+    </tr>
+    <tr th:each="p:${productList}">
+        <td th:text="${p.id}"></td>
+        <td th:text="${p.name}"></td>
+        <td th:text="${p.price}"></td>
+        <td th:text="${p.quantity}"></td>
+        <td th:text="${p.category}"></td>
+
+        <td>
+            <form action="/addToCart" method="post">
+                <input name="productId" hidden th:value="${p.id}">
+                <button type="submit" class="btn btn-lg btn-block btn-primary">
+                    Adauga in cos
+                </button>
+            </form>
+        </td>
+    </tr>
+
+</table>
+
+<p>Cos:</p>
+<p th:text="${items}"></p>
+
 </body>
 </html>
